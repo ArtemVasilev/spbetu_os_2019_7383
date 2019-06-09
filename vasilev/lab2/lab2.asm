@@ -1,22 +1,22 @@
 TESTPC	SEGMENT
         ASSUME  CS:TESTPC, DS:TESTPC, ES:NOTHING, SS:NOTHING
-        org 100H	; использовать смещение 100h (256 байт) от начала
-				; сегмента, в который загружена наша программа
-START:  JMP BEGIN	; START - точка входа
+        org 100H	; ┬и├б┬п┬о┬л├м┬з┬о┬в┬а├в├м ├б┬м┬е├й┬е┬н┬и┬е 100h (256 ┬б┬а┬й├в) ┬о├в ┬н┬а├з┬а┬л┬а
+				; ├б┬е┬г┬м┬е┬н├в┬а, ┬в ┬к┬о├в┬о├а├л┬й ┬з┬а┬г├а├г┬ж┬е┬н┬а ┬н┬а├и┬а ┬п├а┬о┬г├а┬а┬м┬м┬а
+START:  JMP BEGIN	; START - ├в┬о├з┬к┬а ┬в├е┬о┬д┬а
 
-; ДАННЫЕ:
-; дополнительные данные
+; тАЮтВм┬Н┬НтА║тАж:
+; ┬д┬о┬п┬о┬л┬н┬и├в┬е┬л├м┬н├л┬е ┬д┬а┬н┬н├л┬е
 EOF	EQU '$'
-_endl	db ' ',0DH,0AH,'$' ; новая строка
+_endl	db ' ',0DH,0AH,'$' ; ┬н┬о┬в┬а├п ├б├в├а┬о┬к┬а
 
-_seg_inaccess	db 'Сегментный адрес недоступной памяти:     ',0DH,0AH,EOF
-_seg_env		db 'Сегментный адрес среды:    ',0DH,0AH,EOF
-_tail		db 'Хвост командной строки: ', EOF
-_env 		db 'Содержимое области среды:',0DH,0AH,EOF
-_dir	db 'Путь загружаемого модуля:',0DH,0AH,EOF
-_symb  db 'нет символов',0DH,0AH,EOF
+_seg_inaccess	db 'тАШ┬е┬г┬м┬е┬н├в┬н├л┬й ┬а┬д├а┬е├б ┬н┬е┬д┬о├б├в├г┬п┬н┬о┬й ┬п┬а┬м├п├в┬и:     ',0DH,0AH,EOF
+_seg_env		db 'тАШ┬е┬г┬м┬е┬н├в┬н├л┬й ┬а┬д├а┬е├б ├б├а┬е┬д├л:    ',0DH,0AH,EOF
+_tail		db 'тАв┬в┬о├б├в ┬к┬о┬м┬а┬н┬д┬н┬о┬й ├б├в├а┬о┬к┬и: ', EOF
+_env 		db 'тАШ┬о┬д┬е├а┬ж┬и┬м┬о┬е ┬о┬б┬л┬а├б├в┬и ├б├а┬е┬д├л:',0DH,0AH,EOF
+_dir	db '┬П├г├в├м ┬з┬а┬г├а├г┬ж┬а┬е┬м┬о┬г┬о ┬м┬о┬д├г┬л├п:',0DH,0AH,EOF
+_symb  db '┬н┬е├в ├б┬и┬м┬в┬о┬л┬о┬в',0DH,0AH,EOF
 
-; ПРОЦЕДУРЫ:
+; ┬П┬Р┼╜тАУтАжтАЮтАЬ┬РтА║:
 TETR_TO_HEX PROC near
 	and AL,0Fh
 	cmp AL,09
@@ -26,7 +26,7 @@ NEXT:	add AL,30h
 	ret
 TETR_TO_HEX ENDP
 
-;байт AL переводится в два символа шестн. числа в AX
+;┬б┬а┬й├в AL ┬п┬е├а┬е┬в┬о┬д┬и├в├б├п ┬в ┬д┬в┬а ├б┬и┬м┬в┬о┬л┬а ├и┬е├б├в┬н. ├з┬и├б┬л┬а ┬в AX
 BYTE_TO_HEX PROC near
 	push CX
 	mov AH,AL
@@ -34,13 +34,13 @@ BYTE_TO_HEX PROC near
 	xchg AL,AH
 	mov CL,4
 	shr AL,CL
-	call TETR_TO_HEX  ;в AL - старшая, в AH - младшая
+	call TETR_TO_HEX  ;┬в AL - ├б├в┬а├а├и┬а├п, ┬в AH - ┬м┬л┬а┬д├и┬а├п
 	pop CX
 	ret
 BYTE_TO_HEX ENDP
 
-;перевод в 16 с/с 16-ти разрядного числа
-;в AX - число, DI - адрес последнего символа
+;┬п┬е├а┬е┬в┬о┬д ┬в 16 ├б/├б 16-├в┬и ├а┬а┬з├а├п┬д┬н┬о┬г┬о ├з┬и├б┬л┬а
+;┬в AX - ├з┬и├б┬л┬о, DI - ┬а┬д├а┬е├б ┬п┬о├б┬л┬е┬д┬н┬е┬г┬о ├б┬и┬м┬в┬о┬л┬а
 WRD_TO_HEX PROC near
 	push BX
 	mov BH,AH
@@ -58,7 +58,7 @@ WRD_TO_HEX PROC near
 	ret
 WRD_TO_HEX ENDP
 
-;перевод в 10с/с, SI - адрес поля младшей цифры
+;┬п┬е├а┬е┬в┬о┬д ┬в 10├б/├б, SI - ┬а┬д├а┬е├б ┬п┬о┬л├п ┬м┬л┬а┬д├и┬е┬й ├ж┬и├д├а├л
 BYTE_TO_DEC PROC near
 	push CX
 	push DX
@@ -81,29 +81,29 @@ end_l:	pop DX
 	ret
 BYTE_TO_DEC ENDP
 
-; функция определения сегментного адреса недоступной памяти
+; ├д├г┬н┬к├ж┬и├п ┬о┬п├а┬е┬д┬е┬л┬е┬н┬и├п ├б┬е┬г┬м┬е┬н├в┬н┬о┬г┬о ┬а┬д├а┬е├б┬а ┬н┬е┬д┬о├б├в├г┬п┬н┬о┬й ┬п┬а┬м├п├в┬и
 SEGMENT_INACCESS PROC NEAR
 	push ax
 	push di
 
-	mov ax, ds:[02h] ; загружаем адрес
+	mov ax, ds:[02h] ; ┬з┬а┬г├а├г┬ж┬а┬е┬м ┬а┬д├а┬е├б
 	mov di, offset _seg_inaccess
-	add di, 40 ; загружаем адрес последнего символа _seg_inacces
-	call WRD_TO_HEX ; переводим ax в 16СС
+	add di, 40 ; ┬з┬а┬г├а├г┬ж┬а┬е┬м ┬а┬д├а┬е├б ┬п┬о├б┬л┬е┬д┬н┬е┬г┬о ├б┬и┬м┬в┬о┬л┬а _seg_inacces
+	call WRD_TO_HEX ; ┬п┬е├а┬е┬в┬о┬д┬и┬м ax ┬в 16тАШтАШ
 
 	pop di
 	pop ax
 	ret
 SEGMENT_INACCESS ENDP
 
-; функция определения сегментного адреса среды, передаваемого программе
+; ├д├г┬н┬к├ж┬и├п ┬о┬п├а┬е┬д┬е┬л┬е┬н┬и├п ├б┬е┬г┬м┬е┬н├в┬н┬о┬г┬о ┬а┬д├а┬е├б┬а ├б├а┬е┬д├л, ┬п┬е├а┬е┬д┬а┬в┬а┬е┬м┬о┬г┬о ┬п├а┬о┬г├а┬а┬м┬м┬е
 SEGMENT_ENVIRONMENT PROC NEAR
 	push ax
 	push di
 
-	mov ax, ds:[2Ch] ; загружаем адрес
+	mov ax, ds:[2Ch] ; ┬з┬а┬г├а├г┬ж┬а┬е┬м ┬а┬д├а┬е├б
 	mov di, offset _seg_env
-	add di, 27 ; загружаем адрес последнего символа _seg_env
+	add di, 27 ; ┬з┬а┬г├а├г┬ж┬а┬е┬м ┬а┬д├а┬е├б ┬п┬о├б┬л┬е┬д┬н┬е┬г┬о ├б┬и┬м┬в┬о┬л┬а _seg_env
 	call WRD_TO_HEX
 
 	pop di
@@ -111,69 +111,69 @@ SEGMENT_ENVIRONMENT PROC NEAR
 	ret
 SEGMENT_ENVIRONMENT ENDP
 
-; функция определяет хвост программной строки в символьном виде
+; ├д├г┬н┬к├ж┬и├п ┬о┬п├а┬е┬д┬е┬л├п┬е├в ├е┬в┬о├б├в ┬п├а┬о┬г├а┬а┬м┬м┬н┬о┬й ├б├в├а┬о┬к┬и ┬в ├б┬и┬м┬в┬о┬л├м┬н┬о┬м ┬в┬и┬д┬е
 TAIL PROC NEAR
-	push ax
-	push cx
-	push dx
-	push si
-	push di
-
-	mov ch, ds:[80h] ; загружаем в ch число символов в конце командной строки
-	mov si, 81h
-	mov di, offset _tail
-	add di, 20
-CopyCmd:
-	cmp ch, 0h
-	je NoCmd ; если число символов в хвосте командной строки = 0
-;No NoCmd
-	mov al, ds:[si] ; копируем в di очередной элемент (по адресу si)
-	mov [di], al    ; хвоста командной строки
-	inc di ; смещаем адреса si и di
-	inc si ;  на один символ вправо
-	dec ch ; --ch
-	jmp CopyCmd ; циклически копируем командную строку
+    push ax
+    push bx
+    push cx
+    push dx
+    push si
+    push di
+ 
+    mov ah, 02h
+    mov cl, ds:[80h]
+    cmp cl, 0
+    je NoCmd
+ 
+    mov bx, 0
+PrintCmd:
+    mov dl, ds:[81h+bx]
+    int 21h
+    inc bx
+    loop PrintCmd
+    jmp TailExit
+ 
 NoCmd:
-  mov al, 0h
-  mov [di], al
-	mov dx, offset _symb
-	call PRINT
-
-	pop di
-	pop si
-	pop dx
-	pop cx
-	pop ax
-	ret
+    mov dx, offset _symb
+    call PRINT
+ 
+TailExit:
+    pop di
+    pop si
+    pop dx
+    pop cx
+    pop bx
+    pop ax
+    ret
 TAIL ENDP
 
-; функция определяет содержимое области среды
+; ├д├г┬н┬к├ж┬и├п ┬о┬п├а┬е┬д┬е┬л├п┬е├в ├б┬о┬д┬е├а┬ж┬и┬м┬о┬е ┬о┬б┬л┬а├б├в┬и ├б├а┬е┬д├л
 CONTENT PROC NEAR
 	push ax
 	push dx
 	push ds
 	push es
 
-	; вывод содержимого области среды
+	; ┬в├л┬в┬о┬д ├б┬о┬д┬е├а┬ж┬и┬м┬о┬г┬о ┬о┬б┬л┬а├б├в┬и ├б├а┬е┬д├л
 	mov dx, offset _env
 	call PRINT
 
-	mov ah, 02h ; будем выводить посимвольно dl
+	mov ah, 02h ; ┬б├г┬д┬е┬м ┬в├л┬в┬о┬д┬и├в├м ┬п┬о├б┬и┬м┬в┬о┬л├м┬н┬о dl
 	mov es, ds:[2Ch]
 	xor si, si
 WriteCont:
 	mov dl, es:[si]
-	int 21h			; вывод
-	cmp dl, 0h		; проверяем на конец строки
+	int 21h			; ┬в├л┬в┬о┬д
+	cmp dl, 0h		; ┬п├а┬о┬в┬е├а├п┬е┬м ┬н┬а ┬к┬о┬н┬е├ж ├б├в├а┬о┬к┬и
 	je	EndOfLine
-	inc si			; переходим к рассмотрению след. символа
+	inc si			; ┬п┬е├а┬е├е┬о┬д┬и┬м ┬к ├а┬а├б├б┬м┬о├в├а┬е┬н┬и├о ├б┬л┬е┬д. ├б┬и┬м┬в┬о┬л┬а
 	jmp WriteCont
 EndOfLine:
-	mov dx, offset _endl ; прыжок на новую строчку
+	mov dx, offset _endl ; ┬п├а├л┬ж┬о┬к ┬н┬а ┬н┬о┬в├г├о ├б├в├а┬о├з┬к├г
 	call PRINT
 	inc si
 	mov dl, es:[si]
-	cmp dl, 0h		; проверяем на конец содержимого области среды (если два подряд 0 байта)
+	cmp dl, 0h		; ┬п├а┬о┬в┬е├а├п┬е┬м ┬н┬а ┬к┬о┬н┬е├ж ├б┬о┬д┬е├а┬ж┬и┬м┬о┬г┬о ┬о┬б┬л┬а├б├в┬и ├б├а┬е┬д├л (┬е├б┬л┬и ┬д┬в┬а ┬п┬о┬д├а├п┬д 0 ┬б┬а┬й├в┬а)
 	jne WriteCont
 
 	mov dx, offset _endl
@@ -186,7 +186,7 @@ EndOfLine:
 	ret
 CONTENT ENDP
 
-; вывод пути загружаемого модуля
+; ┬в├л┬в┬о┬д ┬п├г├в┬и ┬з┬а┬г├а├г┬ж┬а┬е┬м┬о┬г┬о ┬м┬о┬д├г┬л├п
 PATH PROC NEAR
 	push ax
 	push dx
@@ -214,7 +214,7 @@ PATH PROC NEAR
 	ret
 PATH ENDP
 
-; функция вывода на экран
+; ├д├г┬н┬к├ж┬и├п ┬в├л┬в┬о┬д┬а ┬н┬а ├н┬к├а┬а┬н
 PRINT PROC NEAR
 	push ax
 	mov ah, 09h
@@ -223,7 +223,7 @@ PRINT PROC NEAR
 	ret
 PRINT ENDP
 
-; КОД
+; ┼а┼╜тАЮ
 BEGIN:
 	call SEGMENT_INACCESS
   mov dx, offset _seg_inaccess
@@ -241,10 +241,10 @@ BEGIN:
 	mov dx, offset _endl
 	call PRINT
 
-; выход в DOS
+; ┬в├л├е┬о┬д ┬в DOS
 	xor al, al
 	mov ah, 4ch
 	int 21h
 
 TESTPC 	ENDS
-		END START	; конец модуля
+		END START	; ┬к┬о┬н┬е├ж ┬м┬о┬д├г┬л├п
